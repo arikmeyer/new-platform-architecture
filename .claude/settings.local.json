@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(but status)",
+      "Bash(gh repo create:*)",
+      "Bash(but --version:*)",
+      "Bash(but --help:*)",
+      "Bash(but init:*)",
+      "Bash(fd:*)",
+      "Bash(gh repo:*)",
+      "Bash(cat:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(git config:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
