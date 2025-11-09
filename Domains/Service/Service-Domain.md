@@ -2,26 +2,27 @@
 
 ## 1. Core Mandate & Philosophy
 
-The /service domain is the exclusive **API Gateway and Experience Layer** for all external interactions, serving both end-users (via web/mobile apps) and internal colleagues (via admin tools). Its primary purpose is to translate the intents of external actors into well-defined, secure requests to the core business process layer (/case).
+The /service domain is the exclusive **User Interaction Layer** for all user-facing communications, serving both end-users and internal colleagues (support agents). Its primary purpose is to handle all user communications: **inbound** (classifying user requests via email/chat/phone), **outbound** (responding to users with notifications and status updates), and providing a **self-service dashboard** (provider-agnostic view of contracts, usage, and savings). It translates user intents into well-defined, secure requests to the core business process layer (/case).
 
 This domain operates under a **"Secure Facade"** philosophy. Its capabilities are designed to be:
 
 1. **Intent-Focused:** The primary job is to understand the *goal* of an external request (e.g., "user wants to update address") not to execute the steps to achieve it.
 2. **Stateless and Thin:** This domain is a "thin" layer. It holds no business state of its own and contains minimal business logic. Its main functions are authentication, authorization, request validation, and delegation to the /case domain.
-3. **The Single Point of Entry:** All synchronous, external API calls from the Presentation Layer (Layer 5) **must** pass through this Service Layer (Layer 4). There is no direct access from the outside world to the /case or /lifecycle domains.
+3. **The Single Point of Entry:** All user communications (email/chat/phone) and dashboard interactions **must** pass through this Service domain (Layer 1). There is no direct access from the outside world to the /case or /lifecycle domains.
 4. **Context-Agnostic (by design):** Unlike our previous models, this domain is now "dumber." It is no longer responsible for assembling a complex 360-degree view of the user. It simply passes the user/agent identifiers to the /case domain, which is the authoritative source of business context.
 
 ## 2. Architectural Structure & Implementation
 
-- **Implementation:** The capabilities in this domain are best implemented as Windmill **Scripts** exposed as **Webhooks**. This creates a standard, secure, and scalable API layer. A framework like Python's FastAPI is ideal for building the logic within these scripts to handle request validation and response formatting.
+- **Implementation:** The capabilities in this domain are best implemented as Windmill **Scripts** and **Flows**. For email/chat processing, use Flows with LLM chains. For dashboard endpoints, use Scripts exposed as **Webhooks** with request validation and response formatting.
 - **Structure:** /service/<actor>/<capability>. The structure is organized by the primary actor being served (end-users or internal colleagues).
 
 ## 3. The Strict Interaction Rule (The Boundary)
 
 Following our definitive "Hub and Spoke" architecture:
 
-- The /service domain **ONLY CALLS** the /case domain (Layer 3).
+- The /service domain **ONLY CALLS** the /case domain (Layer 2-3).
 - It is **STRICTLY FORBIDDEN** from calling /lifecycle, /provider, /optimisation, or any other "tool" domain directly. Its job is to initiate a business process, not to cherry-pick the tools for that process.
+- **Note**: While /service is conceptually a "Limb" (Tool Domain) at Layer 1 alongside /provider, /offer, /optimisation, and /growth, it has a special communication pattern—it calls /case instead of /lifecycle. This is because it serves as the external entry point into the system.
 
 ## 4. Detailed Capability Specifications
 
@@ -53,9 +54,7 @@ These are the Windmill scripts exposed as webhooks that would power the SwitchUp
     2. **Request Validation:** It validates the incoming intent_payload against a schema for the given intent_name. If invalid, it returns a 400 Bad Request.
     3. **Delegation to the Brain:** It makes a single, authoritative call to the Process Dispatcher to start the appropriate business process.
 
-         ```python
-    from windmill_sdk import run_script_by_path
-
+         ```
     case_run = run_script_by_path(
         "u/your_workspace/case/meta/dispatch-process_flow",
         args={
@@ -67,7 +66,7 @@ These are the Windmill scripts exposed as webhooks that would power the SwitchUp
     )
     ```
 
-    1. **Formatting the Response:** It takes the run_id from the successfully initiated case flow and formats the user-friendly JSON response.
+    4. **Formatting the Response:** It takes the run_id from the successfully initiated case flow and formats the user-friendly JSON response.
 
 ### 4.2. The Public "Support Augmentation" Capabilities (The Admin/Copilot API)
 
@@ -80,7 +79,7 @@ These are the webhooks that power the internal admin tools used by support colle
 - **Core Logic:**
     1. **Authentication & Authorization:** Validates the agent's credentials and checks if they have permission to view the requested user's data.
     2. **Delegation to the Brain:** This capability is a simple, secure pass-through. It makes a single call to the authoritative source of context.
-    3. ```python
+    3. ```
     user_view = run_script_by_path(
         "u/your_workspace/case/context/get-comprehensive-case-view",
         args={"user_id": user_id_from_query}
@@ -106,5 +105,5 @@ These are the webhooks that power the internal admin tools used by support colle
 - **Direct External Interaction:** This domain **NEVER** calls /provider. It does not know how to talk to the outside world.
 - **Complex Decision Making:** This domain **NEVER** calls /optimisation. It does not decide if a switch is good; it only triggers the /case process that is responsible for making that decision.
 
-This detailed specification solidifies the /service domain's role as a clean, secure, and thin API gateway. It protects the core business logic from the complexities of external interaction and enforces the strict hierarchical data flow that is essential for the architecture's long-term stability and maintainability. It is the disciplined and professional "front door" to your entire operational system.
+This detailed specification solidifies the /service domain's role as the user interaction layer. It handles all inbound user communications (email/chat/phone), provides outbound responses, and offers a self-service dashboard. It protects the core business logic from the complexities of user interaction and enforces the strict hierarchical data flow that is essential for the architecture's long-term stability and maintainability. It is the disciplined and professional interface for all user-facing interactions.
 

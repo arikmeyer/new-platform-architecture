@@ -17,7 +17,7 @@ The /case domain is implemented as a library of **Windmill Flows**, organized in
 - **Key Responsibility:** To perform initial data validation, interpretation (by calling /provider or /service capabilities), and then make a single, standardized call to the /case/meta/dispatch-process_flow to initiate the correct core business process.
 - **Example Flows:**
   - process-inbound-provider-communication_flow: Triggered by a new email/document, interprets it, and dispatches a core process like handle-price-increase.
-  - handle-inbound-user-request_flow: Triggered by a user-facing API gateway, interprets the user's intent, and dispatches a core process like update-user-address.
+  - handle-inbound-user-request_flow: Triggered by user communication (email/chat/phone), interprets the user's intent, and dispatches a core process like update-user-address.
 
 ### 2.2. Subdomain: /case/meta/ (The "Central Nervous System")
 
@@ -28,7 +28,7 @@ The /case domain is implemented as a library of **Windmill Flows**, organized in
         - It is the universal entry point for *all* orchestrated business processes called by the ingestion flows.
         - Its logic is simple: it calls the "Strategy Resolution Script" and then dynamically executes the target path that the script returns.
     2. **/case/meta/resolve-process-target_script (The Strategy Resolver):**
-        - A single Windmill **Script** (Python).
+        - A single Windmill **Script**.
         - Its logic is to load the federated routing.json configuration for a given process_name, execute the defined strategy (by calling a strategy capability from /optimisation/routing_strategies/), and return the final target_path of the implementation flow to be executed.
 
 ### 2.3. Subdomain: /case/<business_purpose>/ (The "Playbooks & Agents")

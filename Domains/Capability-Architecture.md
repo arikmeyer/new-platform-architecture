@@ -15,10 +15,10 @@ Our system is architected around a central philosophy that prioritizes clarity, 
 The system is partitioned into a set of clear, business-aligned domains, each with an exclusive mandate.
 
 - **/lifecycle/ (The Ledger of State):** The exclusive, transactional owner of the state and history of all core business entities (Contract, User, MeterPoint, etc.). It provides rich, computed properties on-demand.
-- **/provider/ (The External Interface):** The anti-corruption layer that provides a stable, reliable interface to all chaotic external provider systems. It owns all provider-specific interaction logic.
+- **/provider/ (Provider Interactions):** Handles all interactions with external providers. Inbound: parses provider emails, scrapes provider portals, extracts provider messages/documents. Outbound: executes actions on provider systems via RPA bots (login, submit forms, meter readings, cancellations).
 - **/offer/ (The Market Knowledge Base):** The single source of truth for all products and tariffs available in the market. It owns the logic for ingesting, modeling, and normalizing market data.
 - **/optimisation/ (The Decision Engine):** A pure, stateless "brain-as-a-service" that provides intelligent, data-driven decisions, evaluations, and recommendations.
-- **/service/ (The User & Agent Service Domain):** Manages all direct interactions and provides the tools for a seamless service experience for both end-users and internal support colleagues.
+- **/service/ (User Interactions):** Handles all interactions with users. Inbound: classifies user requests via email/chat/phone. Outbound: responds to users. Provides self-service dashboard with provider-agnostic view of contracts, usage, and savings.
 - **/growth/ (The Acquisition & Activation Domain):** Responsible for attracting, onboarding, and activating new users through content and personalized experiences.
 - **/case/ (The Business Process Orchestrator):** The exclusive home of orchestration. It contains the explicit, end-to-end business processes that combine the "tools" from all other domains to create business value.
 
