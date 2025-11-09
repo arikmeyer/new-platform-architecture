@@ -13,7 +13,7 @@ This domain operates under an **"Autonomous Conversion Engine"** philosophy. Its
 
 ### 2. Architectural Structure & Implementation
 
-- **Implementation:** **Python** is the primary language for this domain, given its strengths in data analysis, machine learning (for personalization and reinforcement learning), and web frameworks. **TypeScript/Node.js** may also be used for capabilities that are heavily reliant on the front-end ecosystem.
+- **Implementation:** Capabilities in this domain are implemented as Windmill **Scripts** and **Flows** for data analysis, machine learning (personalization and reinforcement learning), and content generation.
 - **Structure:** /growth/<function>/<capability>. The structure is organized by the stage of the acquisition funnel.
 
 ### 3. The Strict Interaction Rule (The Boundary)

@@ -13,7 +13,7 @@ This domain operates under a **"Stateless Oracle"** philosophy. Its capabilities
 
 ## 2. Architectural Structure & Implementation
 
-- **Implementation:** **Python** is the dominant language for this domain, leveraging its world-class ecosystem for data science, machine learning, and numerical computation (e.g., Pandas, Polars, Scikit-learn, PyTorch/TensorFlow). Performance-critical, pure calculation logic (like cost calculation) can be implemented in **Rust** as private helper libraries called by the public Python capabilities.
+- **Implementation:** Capabilities in this domain are implemented as Windmill **Scripts** for data transformation, statistical models, and machine learning pipelines. Performance-critical calculation logic should be optimized for speed and efficiency.
 - **Structure:** /optimisation/<function>/<capability>. The structure is organized by the type of question being answered.
 
 ## 3. Detailed Capability Specifications (Applied to SwitchUp Use Cases)
@@ -45,7 +45,7 @@ This is the absolute heart of the SwitchUp value proposition.
 }
 ```
 - **Core Logic:** This is a complex orchestration of private helpers.
-    1. **Calls _calculate_long_term_value (H)** for the current_contract and for *every single offer* in available_offers. This helper contains the core, battle-tested logic for factoring in bonuses, price guarantees, etc. (This helper is a prime candidate for a Rust implementation for maximum speed).
+    1. **Calls _calculate_long_term_value (H)** for the current_contract and for *every single offer* in available_offers. This helper contains the core, battle-tested logic for factoring in bonuses, price guarantees, etc.
     2. **Calls _score_non_financial_factors (H)** for each offer, applying a scoring model based on the user_context.preferences (e.g., green energy, provider rating, contract length).
     3. **Calls _synthesize_final_ranking (H)** to combine the financial value and non-financial scores into a single, final utility score for each offer.
     4. It selects the offer with the highest utility score as the optimum and formats the final output object.
@@ -99,10 +99,10 @@ This is for proactive, intelligent operations.
 }
 ```
 - **Core Logic:**
-    1. This capability is a wrapper around a trained Machine Learning model (e.g., a gradient boosting model or a neural network).
+    1. This capability is a wrapper around a trained Machine Learning model.
     2. It performs "feature engineering" on the raw user_context and recent_activity to create the inputs the model expects.
     3. It invokes the ML model to get the probability score.
-    4. It uses a technique like SHAP (SHapley Additive exPlanations) to determine the top contributing factors for the prediction, providing crucial explainability.
+    4. It determines the top contributing factors for the prediction, providing crucial explainability.
 
 ### 3.4. The "Intelligent Routing" Use Case
 

@@ -2,7 +2,7 @@
 
 ## 1. Core Mandate & Philosophy
 
-The /provider domain is the exclusive owner and executor of all **interactions with and knowledge about external provider systems**. Its primary purpose is to act as a robust **Anti-Corruption Layer**, providing a stable, unified, and business-oriented interface to the rest of the SwitchUp system, while internally managing the immense complexity of heterogeneous provider interfaces.
+The /provider domain is the exclusive owner and executor of all **interactions with and knowledge about external provider systems**. Its primary purpose is to handle all provider communications: **inbound** (parsing provider emails, scraping provider portals, extracting provider messages/documents) and **outbound** (executing actions on provider systems via RPA bots, API calls, or email). It provides a stable, unified, and business-oriented interface to the rest of the SwitchUp system, while internally managing the immense complexity of heterogeneous provider interfaces.
 
 This domain operates under a **"Resilient Adapter"** philosophy. Its capabilities are designed to be:
 
@@ -88,7 +88,7 @@ These are the only capabilities in this domain that should be called by the /cas
 These are the numerous, volatile, and highly specific scripts that do the actual work. They are **never** called directly from outside the /provider domain.
 
 - _interact-via-api-client_v[N] (H): A script that speaks a specific provider's REST/SOAP API.
-- _interact-via-adaptive-bot_v[N] (H): A Python/RPA script that logs into and navigates a specific provider's web portal.
+- _interact-via-adaptive-bot_v[N] (H): An RPA script that logs into and navigates a specific provider's web portal.
 - _extract-billing-details_agent (H): An LLM-powered agent fine-tuned to extract data from bills.
 - _update-knowledge-graph-from-website_agent (H): A scheduled AI agent that monitors provider websites for changes and proposes updates to the Knowledge Graph, to be validated by a human in the /operations domain.
 

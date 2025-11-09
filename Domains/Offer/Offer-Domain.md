@@ -15,7 +15,7 @@ This domain operates under a **"Model-Driven Pipeline"** philosophy, adhering to
 
 ## 2. Architectural Structure & Implementation
 
-- **Implementation:** **Python** is the designated language due to the requirements for complex data transformation (Pandas/Polars), rule engine implementation, and the potential for AI/ML in the matching and normalization capabilities.
+- **Implementation:** Capabilities in this domain are implemented as Windmill **Scripts** for complex data transformation, rule engine implementation, and AI/ML-based matching and normalization.
 - **Structure:** The domain is organized into two primary subdomains:
 - /offer/management/: Contains the administrative capabilities for managing the ontology itself.
 - /offer/processing/: Contains the public-facing pipeline capabilities for ingesting and evaluating offers.

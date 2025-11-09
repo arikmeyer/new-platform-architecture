@@ -35,31 +35,36 @@ The system is organized into **7 primary domains**, each with exclusive mandates
   - **Golden Rule**: Calls no one; everyone calls it for truth
 
 ### Layer 1: The Limbs (Tool Domains)
-- **/provider/**: Anti-corruption layer for external provider systems
-  - Manages all provider interactions (API, RPA, email)
-  - Provides action-oriented interface (e.g., `initiate-cancellation`, `register-new-contract`)
-  - Contains **Provider Knowledge Graph** (private)
+- **/provider/**: Provider interactions
+  - **Inbound**: Parse provider emails, scrape provider portals, extract provider messages/documents
+  - **Outbound**: Execute actions on provider systems (RPA bots: login, submit forms, meter readings, cancellations)
+  - Stores: portal credentials, RPA execution logs, scraping results (JSONB)
 
-- **/offer/**: Universal Service Ontology and market knowledge
-  - Defines canonical offer data model (Entities, Elements, Policies, Contexts)
-  - Provides pipeline: ingestion → normalization → matching → evaluation
-  - Describes offers but never prescribes which is "best"
+- **/offer/**: Market data and tariff knowledge
+  - Ingestion pipelines (fetch tariffs from multiple sources)
+  - Normalization (canonical offer data model)
+  - Matching rules (find relevant offers for contracts)
+  - Stores: normalized offers, ingestion metadata, matching rules, market data (JSONB)
 
-- **/optimisation/**: Stateless decision engine and calculation brain
-  - Pure functions for complex calculations (savings, value projections)
-  - Predictive models (churn risk, user behavior)
-  - Routing strategies for A/B testing
-  - **Philosophy**: Given same input, always produces same output
+- **/optimisation/**: Decision engine
+  - Savings calculations (compare current vs alternative tariffs)
+  - ML models (churn risk, user behavior prediction)
+  - Recommendation generation (rank alternatives)
+  - A/B test routing strategies
+  - Stores: ML model outputs, calculation results, A/B configurations, projections (JSONB)
 
-- **/service/**: API gateway and experience layer
-  - Thin authentication/authorization layer for external actors
-  - Translates user/agent intents into /case process calls
+- **/service/**: User interactions
+  - **Inbound**: Classify user requests via email/chat/phone
+  - **Outbound**: Respond to users (notifications, status updates, replies)
+  - **Self-service dashboard**: Provider-agnostic view of contracts, usage, savings
+  - Stores: conversation memory, LLM classification state, user session data (JSONB)
   - **Strict boundary**: Only calls /case domain, never direct to tools
 
-- **/growth/**: User acquisition and activation engine
-  - Content generation for organic traffic
-  - Personalized onboarding funnels (using RL/multi-armed bandits)
-  - Hands off completed users to /case domain
+- **/growth/**: User acquisition
+  - Content generation (blog posts, landing pages using AI)
+  - Funnel analytics (track conversion, optimize flows)
+  - Personalized onboarding (RL/multi-armed bandits)
+  - Stores: content generation results, funnel analytics, personalization state (JSONB)
 
 ### Layer 2-3: The Brain (Process Orchestrator)
 - **/case/**: Exclusive owner of all end-to-end business processes
@@ -83,7 +88,6 @@ Strict rules prevent domain coupling:
 - **/lifecycle** (Layer 0): Calls no one
 - **Tool domains** (Layer 1): Can only call /lifecycle
 - **/case** (Layer 2-3): Can call any tool domain and /lifecycle
-- **/service** (Layer 4): Can only call /case
 - No lateral communication between tool domains
 
 ### Configuration-Driven Agility
@@ -142,14 +146,3 @@ Detailed specifications for each domain:
 - **Aggregate Offer**: Fully evaluated offer with applied policies and context
 - **Process Dispatcher**: Central router in /case/meta/ that executes strategy-driven process selection
 - **Trace ID**: Unique identifier propagated through entire distributed process execution
-
-## Language & Technology Recommendations
-
-**Per Domain:**
-- **/lifecycle**: Go or Rust (type safety, performance for foundational layer)
-- **/provider**: Python (adaptability, RPA libraries, LLM integration)
-- **/offer**: Python (data transformation with Pandas/Polars, rule engines)
-- **/optimisation**: Python with Rust for performance-critical calculations
-- **/service**: Python FastAPI (request validation, webhook implementation)
-- **/growth**: Python (ML/RL frameworks) or TypeScript (frontend integration)
-- **/case**: Windmill Flows (visual orchestration)

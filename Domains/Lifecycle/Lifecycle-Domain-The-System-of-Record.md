@@ -13,7 +13,7 @@ This domain operates under a **"Guardian of the Digital Twin"** philosophy. Its 
 
 ## 2. Architectural Structure & Implementation
 
-- **Implementation:** The capabilities in this domain are implemented as Windmill **Scripts**. **Go** or **Rust** are the recommended languages due to their strong type safety and performance, which are critical for this foundational layer.
+- **Implementation:** The capabilities in this domain are implemented as Windmill **Scripts** with strong type safety and performance optimization, which are critical for this foundational layer.
 - **Structure:** /lifecycle/<entity>/<capability>. The structure is strictly organized by the business entity.
 - **Interaction Rules (Hub and Spoke - Layer 0):**
   - **Who it Calls:** **No one.** This domain is the bedrock of the architecture and has zero upstream dependencies on any other domain.
