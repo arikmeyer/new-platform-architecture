@@ -13,7 +13,8 @@
       "Bash(gh repo:*)",
       "Bash(cat:*)",
       "Bash(git rev-parse:*)",
-      "Bash(git config:*)"
+      "Bash(git config:*)",
+      "mcp__sequential__sequentialthinking"
     ],
     "deny": [],
     "ask": []
